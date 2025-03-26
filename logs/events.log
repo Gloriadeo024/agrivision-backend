@@ -1,0 +1,6 @@
+[2025-03-07 09:18:12] EVENT: User login successful
+User: user@example.com
+IP Address: 192.168.1.100
+
+[2025-03-07 09:45:03] EVENT: Data sync started
+Data Source: Crop yield data

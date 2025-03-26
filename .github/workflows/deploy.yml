@@ -1,0 +1,44 @@
+name: CI/CD for AgriVision 🚀
+
+on:
+  push:
+    branches:
+      - main  # Runs on push to main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test  # Ensure tests pass before deployment
+
+      - name: Log in to Docker Hub
+        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t ${{ secrets.DOCKER_REPOSITORY }}/agrivision-backend .
+          docker push ${{ secrets.DOCKER_REPOSITORY }}/agrivision-backend
+
+      - name: Configure Kubernetes
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" | base64 --decode > kubeconfig
+          export KUBECONFIG=kubeconfig
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f k8s/deployment.yaml
+
+      - name: Verify Deployment
+        run: kubectl rollout status deployment agrivision-deployment

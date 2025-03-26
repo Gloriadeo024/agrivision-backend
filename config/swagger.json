@@ -1,0 +1,13 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "AgriVision API",
+      "description": "API documentation for AgriVision System",
+      "version": "1.0.0"
+    },
+    "host": "localhost:5001",
+    "basePath": "/api",
+    "schemes": ["http"],
+    "paths": {}
+  }
+  

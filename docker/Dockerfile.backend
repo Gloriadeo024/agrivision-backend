@@ -1,0 +1,25 @@
+# AgriVision Backend Dockerfile
+
+# Use official Node.js image
+FROM node:18-alpine
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+
+# Install dependencies
+RUN npm install
+
+# Copy all files
+COPY . .
+
+# Expose backend port
+EXPOSE 5001
+
+# Set environment variables
+ENV NODE_ENV=production
+
+# Run the server
+CMD ["node", "src/server.js"]

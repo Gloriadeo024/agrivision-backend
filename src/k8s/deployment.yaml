@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agrivision-deployment
+  labels:
+    app: agrivision
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: agrivision
+  template:
+    metadata:
+      labels:
+        app: agrivision
+    spec:
+      containers:
+        - name: agrivision-backend
+          image: agrivision/backend:latest
+          ports:
+            - containerPort: 5001
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: MONGO_URI
+              value: "mongodb://agrivision-mongo:27017/agrivision"
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: agrivision-secrets
+                  key: jwtSecret
+        - name: agrivision-frontend
+          image: agrivision/frontend:latest
+          ports:
+            - containerPort: 80
+      restartPolicy: Always
